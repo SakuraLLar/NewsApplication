@@ -1,4 +1,4 @@
-package dev.sakura.news.database
+package dev.sakura.news.data
 
 import org.junit.Test
 
