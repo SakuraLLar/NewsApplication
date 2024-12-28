@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package dev.sakura.newsapi
 
 import androidx.annotation.IntRange
@@ -7,14 +9,13 @@ import dev.sakura.newsapi.models.ArticleDTO
 import dev.sakura.newsapi.models.Language
 import dev.sakura.newsapi.models.ResponseDTO
 import dev.sakura.newsapi.models.SortBy
-import dev.sakura.newsapi.utils.TimeApyKeyInterceptor
+import dev.sakura.newsapi.utils.NewsApiKeyInterceptor
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.create
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
 import java.util.Date
 
@@ -26,13 +27,13 @@ interface NewsApi {
     /**
      * API Details [here](https://newsapi.org/docs/endpoints/everything)
      */
-    @GET("/everything")
+    @GET("everything")
+    @Suppress("LongParameterList")
     suspend fun everything(
-//        @Header("X-Api-Key") apiKey: String,
         @Query("q") query: String? = null,
         @Query("from") from: Date? = null,
         @Query("to") to: Date? = null,
-        @Query("languages") languages: List<Language>? = null,
+        @Query("languages") languages: List<@JvmSuppressWildcards Language>? = null,
         @Query("sortBy") sortBy: SortBy? = null,
         @Query("pageSize") @IntRange(from = 0, to = 100) pageSize: Int = 100,
         @Query("page") @IntRange(from = 1) page: Int = 1,
@@ -54,15 +55,16 @@ private fun retrofit(
     okHttpClient: OkHttpClient?,
     json: Json,
 ): Retrofit {
-    val jsonConvertedFactory = json.asConverterFactory(MediaType.get("application/json"))
+    val jsonConverterFactory = json.asConverterFactory("application/json".toMediaType())
 
-    val modifiedOkHttpClient = (okHttpClient?.newBuilder() ?: OkHttpClient.Builder())
-        .addInterceptor(TimeApyKeyInterceptor(apiKey))
-        .build()
+    val modifiedOkHttpClient =
+        (okHttpClient?.newBuilder() ?: OkHttpClient.Builder())
+            .addInterceptor(NewsApiKeyInterceptor(apiKey))
+            .build()
 
     return Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(jsonConvertedFactory)
+        .addConverterFactory(jsonConverterFactory)
         .addCallAdapterFactory(ResultCallAdapterFactory.create())
         .client(modifiedOkHttpClient)
         .build()

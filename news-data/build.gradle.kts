@@ -38,5 +38,5 @@ dependencies {
     implementation(project(":database"))
     implementation(project(":newsapi"))
 
-    implementation(libs.jakarta.inject)
+    implementation(libs.javax.inject)
 }

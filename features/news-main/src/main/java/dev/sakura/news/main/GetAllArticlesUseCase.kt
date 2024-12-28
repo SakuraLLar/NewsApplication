@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import dev.sakura.news.data.model.Article as DataArticle
 
-class GetAllArticlesUseCase @Inject constructor(
+internal class GetAllArticlesUseCase @Inject constructor(
     private val repository: ArticlesRepository,
     ) {
 
-    operator fun invoke(): Flow<RequestResult<List<Article>>> {
-        return repository.getAll()
+    operator fun invoke(query: String): Flow<RequestResult<List<ArticleUI>>> {
+        return repository.getAll(query)
             .map { requestResult ->
                 requestResult.map { articles ->
                     articles.map { it.toUiArticles() }
@@ -23,6 +23,6 @@ class GetAllArticlesUseCase @Inject constructor(
     }
 }
 
-private fun DataArticle.toUiArticles(): Article {
+private fun DataArticle.toUiArticles(): ArticleUI {
     TODO("Not yet implemented")
 }

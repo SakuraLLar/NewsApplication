@@ -1,5 +1,9 @@
 package dev.sakura.news.data
 
+import dev.sakura.news.data.RequestResult.InProgress
+import dev.sakura.news.data.RequestResult.Success
+import dev.sakura.news.data.RequestResult.Error
+
 interface MergeStrategy<E> {
 
     fun merge(right: E, left: E): E
@@ -7,48 +11,66 @@ interface MergeStrategy<E> {
 
 internal class RequestResponseMergeStrategy<T : Any> : MergeStrategy<RequestResult<T>> {
 
-    override fun merge(right: RequestResult<T>, left: RequestResult<T>): RequestResult<T> {
+    override fun merge(
+        right: RequestResult<T>,
+        left: RequestResult<T>
+    ): RequestResult<T> {
         return when {
-            right is RequestResult.InProgress && left is RequestResult.InProgress -> merge(right, left)
-
-            right is RequestResult.Success && left is RequestResult.InProgress -> merge(right, left)
-
-            right is RequestResult.InProgress && left is RequestResult.Success -> merge(right, left)
-
-            right is RequestResult.Success && left is RequestResult.Error -> merge(right, left)
-
-            else -> error("Unimplemented branch")
+            right is InProgress && left is InProgress -> merge(right, left)
+            right is Success && left is InProgress -> merge(right, left)
+            right is InProgress && left is Success -> merge(right, left)
+            right is Success && left is Success -> merge(right, left)
+            right is InProgress && left is Error -> merge(right, left)
+            right is Success && left is Error -> merge(right, left)
+            else -> error("Unimplemented branch right=$right & left=$left ")
         }
     }
 
     private fun merge(
-        right: RequestResult.InProgress<T>,
-        left: RequestResult.InProgress<T>
+        right: InProgress<T>,
+        left: InProgress<T>
     ): RequestResult<T> {
         return when {
-            left.data != null -> RequestResult.InProgress(left.data)
-            else -> RequestResult.InProgress(right.data)
+            left.data != null -> InProgress(left.data)
+            else -> InProgress(right.data)
         }
     }
 
-    private fun merge( 
-        right: RequestResult.Success<T>,
-        left: RequestResult.InProgress<T>
+    @Suppress("UNUSED_PARAMETER")
+    private fun merge(
+        right: Success<T>,
+        left: InProgress<T>
     ): RequestResult<T> {
-        return RequestResult.InProgress(right.data)
+        return InProgress(right.data)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    private fun merge(
+        right: InProgress<T>,
+        left: Success<T>
+    ): RequestResult<T> {
+        return InProgress(left.data)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    private fun merge(
+        right: Success<T>,
+        left: Success<T>
+    ): RequestResult<T> {
+        return Success(data = left.data)
     }
 
     private fun merge(
-        right: RequestResult.InProgress<T>,
-        left: RequestResult.Success<T>
+        right: InProgress<T>,
+        left: Error<T>
     ): RequestResult<T> {
-        return RequestResult.InProgress(left.data)
+        return Error(data = left.data?: right.data, error = left.error)
     }
 
     private fun merge(
-        right: RequestResult.Success<T>,
-        left: RequestResult.Error<T>
+        right: Success<T>,
+        left: Error<T>
     ): RequestResult<T> {
-        return RequestResult.Error(data = right.data, error = left.error)
+        return Error(data = right.data, error = left.error)
     }
 }
