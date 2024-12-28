@@ -25,7 +25,8 @@ internal abstract class NewsRoomDatabase : RoomDatabase() {
 fun NewsDatabase(applicationContext: Context) : NewsDatabase {
     val newsRoomDatabase = Room.databaseBuilder(
         checkNotNull(applicationContext.applicationContext),
-        NewsRoomDatabase::class.java, "news"
+        NewsRoomDatabase::class.java,
+        "news"
     ).build()
     return NewsDatabase(newsRoomDatabase)
 }
