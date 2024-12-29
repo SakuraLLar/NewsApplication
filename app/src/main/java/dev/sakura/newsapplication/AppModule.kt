@@ -7,6 +7,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.sakura.common.AppDispatchers
+import dev.sakura.common.Logger
+import dev.sakura.common.logcatLogger
 import dev.sakura.news.database.NewsDatabase
 import dev.sakura.newsapi.NewsApi
 import javax.inject.Singleton
@@ -33,4 +35,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providerAppCoroutineDispatchers(): AppDispatchers = AppDispatchers()
+
+    @Provides
+    fun providerLogger(): Logger = logcatLogger()
 }

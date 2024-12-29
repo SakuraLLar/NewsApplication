@@ -10,7 +10,7 @@ import dev.sakura.news.data.model.Article as DataArticle
 
 internal class GetAllArticlesUseCase @Inject constructor(
     private val repository: ArticlesRepository,
-    ) {
+) {
 
     operator fun invoke(query: String): Flow<RequestResult<List<ArticleUI>>> {
         return repository.getAll(query)
@@ -24,5 +24,11 @@ internal class GetAllArticlesUseCase @Inject constructor(
 }
 
 private fun DataArticle.toUiArticles(): ArticleUI {
-    TODO("Not yet implemented")
+    return ArticleUI(
+        id = cacheId,
+        title = title,
+        description = description,
+        imageUrl = urlToImage,
+        url = url
+    )
 }
