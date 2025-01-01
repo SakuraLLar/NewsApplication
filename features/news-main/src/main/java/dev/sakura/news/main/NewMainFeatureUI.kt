@@ -1,28 +1,43 @@
 package dev.sakura.news.main
 
+<<<<<<< HEAD
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+=======
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+<<<<<<< HEAD
 import androidx.compose.material3.CircularProgressIndicator
+=======
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+<<<<<<< HEAD
 import androidx.compose.ui.Alignment
+=======
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+<<<<<<< HEAD
+=======
+import dev.sakura.news.data.model.Article
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
 
 @Composable
 public fun NewsMainScreen() {
@@ -42,6 +57,7 @@ internal fun NewsMainScreen(viewModel: NewsMainViewModel) {
 
 @Composable
 internal fun ArticlesWithError(articles: List<ArticleUI>?) {
+<<<<<<< HEAD
     Column {
         Box(
             Modifier
@@ -55,10 +71,17 @@ internal fun ArticlesWithError(articles: List<ArticleUI>?) {
         if (articles != null) {
             Articles(articles = articles)
         }
+=======
+    if (articles != null) {
+        Articles(articles = articles)
+    } else {
+        NewsEmpty()
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
     }
 }
 
 @Composable
+<<<<<<< HEAD
 @Preview
 internal fun ArticlesDuringUpdate(
     @PreviewParameter(ArticlesPreviewProvider::class, limit = 1) articles: List<ArticleUI>?,
@@ -75,14 +98,26 @@ internal fun ArticlesDuringUpdate(
         if (articles != null) {
             Articles(articles = articles)
         }
+=======
+internal fun ArticlesDuringUpdate(
+    @PreviewParameter(ArticlesPreviewProvider::class, limit = 1) articles: List<ArticleUI>?,
+) {
+    if (articles != null) {
+        Articles(articles = articles)
+    } else {
+        NewsEmpty()
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
     }
 }
 
 @Composable
 internal fun NewsEmpty() {
+<<<<<<< HEAD
     Box(contentAlignment = Alignment.Center) {
         Text("No news")
     }
+=======
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
 }
 
 @Preview

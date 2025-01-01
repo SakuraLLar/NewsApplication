@@ -48,6 +48,7 @@ public class ArticlesRepository @Inject constructor(
     private fun getAllFromServer(query: String): Flow<RequestResult<List<Article>>> {
         val apiRequest =
             flow { emit(api.everything(query = query)) }
+<<<<<<< HEAD
                 .onEach { result ->
                     if (result.isSuccess) {
                         saveArticlesToCache(result.getOrThrow().articles)
@@ -62,6 +63,15 @@ public class ArticlesRepository @Inject constructor(
                     }
                 }
                 .map { it.toRequestResult() }
+=======
+            .onEach { result ->
+                if (result.isSuccess) {
+                    saveArticlesToCache(result.getOrThrow().articles)
+                }
+            }
+
+            .map { it.toRequestResult() }
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
 
         val start = flowOf<RequestResult<ResponseDTO<ArticleDTO>>>(RequestResult.InProgress())
 
@@ -80,11 +90,15 @@ public class ArticlesRepository @Inject constructor(
 
     private fun getAllFromDatabase(): Flow<RequestResult<List<Article>>> {
         val databaseRequest = database.articleDAO::getAll.asFlow()
+<<<<<<< HEAD
             .map { RequestResult.Success(it) }
             .catch {
                 RequestResult.Error<List<ArticleDBO>>(error = it)
                 logger.e(LOG_TAG, "Error getting from database. Cause = $it")
             }
+=======
+            .map<List<ArticleDBO>, RequestResult<List<ArticleDBO>>> { RequestResult.Success(it) }
+>>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
 
         val start = flowOf<RequestResult<List<ArticleDBO>>>(RequestResult.InProgress())
 
