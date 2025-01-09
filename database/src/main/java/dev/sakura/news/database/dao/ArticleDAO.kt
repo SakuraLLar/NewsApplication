@@ -22,7 +22,7 @@ interface ArticleDAO {
     @Delete
     suspend fun remove(articles: List<ArticleDBO>)
 
-    @Query("Delete From articles")
+    @Query("DELETE FROM articles")
     suspend fun clean()
 
 }

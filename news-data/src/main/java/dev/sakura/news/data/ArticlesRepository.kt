@@ -20,20 +20,20 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 
 
-public class ArticlesRepository @Inject constructor(
+class ArticlesRepository @Inject constructor(
     private val database: NewsDatabase,
     private val api: NewsApi,
     private val logger: Logger,
 ) {
 
-    public fun getAll(
+    fun getAll(
         query: String,
         mergeStrategy: MergeStrategy<RequestResult<List<Article>>> = RequestResponseMergeStrategy(),
     ): Flow<RequestResult<List<Article>>> {
-        val cacheAllArticles: Flow<RequestResult<List<Article>>> = getAllFromDatabase()
+        val cachedAllArticles: Flow<RequestResult<List<Article>>> = gelAllFromDatabase()
         val remoteArticles: Flow<RequestResult<List<Article>>> = getAllFromServer(query)
 
-        return cacheAllArticles.combine(remoteArticles, mergeStrategy::merge)
+        return cachedAllArticles.combine(remoteArticles, mergeStrategy::merge)
             .flatMapLatest { result ->
                 if (result is RequestResult.Success) {
                     database.articleDAO.observeAll()
@@ -48,11 +48,8 @@ public class ArticlesRepository @Inject constructor(
     private fun getAllFromServer(query: String): Flow<RequestResult<List<Article>>> {
         val apiRequest =
             flow { emit(api.everything(query = query)) }
-<<<<<<< HEAD
                 .onEach { result ->
-                    if (result.isSuccess) {
-                        saveArticlesToCache(result.getOrThrow().articles)
-                    }
+                    if (result.isSuccess) saveArticlesToCache(result.getOrThrow().articles)
                 }
                 .onEach { result ->
                     if (result.isFailure) {
@@ -63,54 +60,38 @@ public class ArticlesRepository @Inject constructor(
                     }
                 }
                 .map { it.toRequestResult() }
-=======
-            .onEach { result ->
-                if (result.isSuccess) {
-                    saveArticlesToCache(result.getOrThrow().articles)
-                }
-            }
-
-            .map { it.toRequestResult() }
->>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
 
         val start = flowOf<RequestResult<ResponseDTO<ArticleDTO>>>(RequestResult.InProgress())
-
         return merge(apiRequest, start)
             .map { result: RequestResult<ResponseDTO<ArticleDTO>> ->
-                result.map { response ->
-                    response.articles.map { it.toArticle() }
-                }
+                result.map { response -> response.articles.map { it.toArticle() } }
             }
     }
 
     private suspend fun saveArticlesToCache(data: List<ArticleDTO>) {
-        val DBOS = data.map { articlesDTO -> articlesDTO.toArticleDBO() }
+        val DBOS = data.map { articleDTO -> articleDTO.toArticleDBO() }
         database.articleDAO.insert(DBOS)
     }
 
-    private fun getAllFromDatabase(): Flow<RequestResult<List<Article>>> {
-        val databaseRequest = database.articleDAO::getAll.asFlow()
-<<<<<<< HEAD
-            .map { RequestResult.Success(it) }
-            .catch {
-                RequestResult.Error<List<ArticleDBO>>(error = it)
-                logger.e(LOG_TAG, "Error getting from database. Cause = $it")
-            }
-=======
-            .map<List<ArticleDBO>, RequestResult<List<ArticleDBO>>> { RequestResult.Success(it) }
->>>>>>> 54693bd4d5d17ebca58fa09ea294feeafb636e92
+    private fun gelAllFromDatabase(): Flow<RequestResult<List<Article>>> {
+        val databaseRequest =
+            database.articleDAO::getAll.asFlow()
+                .map<List<ArticleDBO>, RequestResult<List<ArticleDBO>>> { RequestResult.Success(it) }
+                .catch {
+                    logger.e(LOG_TAG, "Error getting from database. Cause = $it")
+                    emit(RequestResult.Error(error = it))
+                }
 
         val start = flowOf<RequestResult<List<ArticleDBO>>>(RequestResult.InProgress())
 
-        return merge(start, databaseRequest)
-            .map { result ->
-                result.map { DBOS ->
-                    DBOS.map { it.toArticle() }
-                }
+        return merge(start, databaseRequest).map { result ->
+            result.map { DBOS ->
+                DBOS.map { it.toArticle() }
             }
+        }
     }
 
     private companion object {
-        const val LOG_TAG = "ArticleRepository"
+        const val LOG_TAG = "ArticlesRepository"
     }
 }

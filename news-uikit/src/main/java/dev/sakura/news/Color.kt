@@ -1,4 +1,4 @@
-package dev.sakura.newsapplication.ui.theme
+package dev.sakura.news
 
 import androidx.compose.ui.graphics.Color
 
