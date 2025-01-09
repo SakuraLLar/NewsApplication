@@ -24,5 +24,4 @@ interface ArticleDAO {
 
     @Query("DELETE FROM articles")
     suspend fun clean()
-
 }

@@ -40,5 +40,4 @@ object AppModule {
 
     @Provides
     fun providerLogger(): Logger = logcatLogger()
-
 }

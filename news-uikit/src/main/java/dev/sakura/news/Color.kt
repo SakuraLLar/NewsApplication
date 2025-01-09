@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package dev.sakura.news
 
 import androidx.compose.ui.graphics.Color

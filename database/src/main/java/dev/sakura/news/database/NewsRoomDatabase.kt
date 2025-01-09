@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
 import dev.sakura.news.database.dao.ArticleDAO
 import dev.sakura.news.database.models.ArticleDBO
 import dev.sakura.news.database.utils.Converters

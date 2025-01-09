@@ -46,5 +46,4 @@ enum class Language {
 
     @SerialName("zh")
     ZH,
-
 }

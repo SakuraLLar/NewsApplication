@@ -5,5 +5,5 @@ public data class ArticleUI(
     val title: String?,
     val description: String?,
     val imageUrl: String?,
-    val url: String?
+    val url: String?,
 )

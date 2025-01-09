@@ -19,7 +19,6 @@ internal class GetAllArticlesUseCase @Inject constructor(
                     articles.map { it.toUiArticles() }
                 }
             }
-
     }
 }
 

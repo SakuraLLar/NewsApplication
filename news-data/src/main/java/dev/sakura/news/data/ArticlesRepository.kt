@@ -7,7 +7,6 @@ import dev.sakura.news.database.models.ArticleDBO
 import dev.sakura.newsapi.NewsApi
 import dev.sakura.newsapi.models.ArticleDTO
 import dev.sakura.newsapi.models.ResponseDTO
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
-
+import javax.inject.Inject
 
 class ArticlesRepository @Inject constructor(
     private val database: NewsDatabase,

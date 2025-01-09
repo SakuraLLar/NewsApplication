@@ -2,9 +2,9 @@
 
 package dev.sakura.news.data
 
+import dev.sakura.news.data.RequestResult.Error
 import dev.sakura.news.data.RequestResult.InProgress
 import dev.sakura.news.data.RequestResult.Success
-import dev.sakura.news.data.RequestResult.Error
 
 interface MergeStrategy<E> {
 

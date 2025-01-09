@@ -3,14 +3,11 @@ package dev.sakura.news.main
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,7 +32,6 @@ import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import dev.sakura.news.NewsTheme
 
-
 @Composable
 public fun NewsMainScreen() {
     NewsMainScreen(viewModel = viewModel())
@@ -54,7 +50,6 @@ internal fun NewsMainScreen(viewModel: NewsMainViewModel) {
 @Composable
 private fun NewsMainContent(currentState: State) {
     Column {
-
         if (currentState is State.Error) {
             ErrorInd(currentState)
         }
@@ -69,6 +64,7 @@ private fun NewsMainContent(currentState: State) {
     }
 }
 
+@Suppress("UNUSED_PARAMETER")
 @Composable
 private fun ErrorInd(state: State.Error) {
     Box(
@@ -82,6 +78,7 @@ private fun ErrorInd(state: State.Error) {
     }
 }
 
+@Suppress("UNUSED_PARAMETER")
 @Composable
 private fun ProgressInd(state: State.Loading) {
     Box(
@@ -123,7 +120,6 @@ internal fun Article(
                         if (state is AsyncImagePainter.State.Error) {
                             isImageVisible = false
                         }
-
                     },
                     contentDescription = stringResource(R.string.content_desc_item_article_image),
                     contentScale = ContentScale.Crop,
@@ -148,11 +144,11 @@ internal fun Article(
                 style = NewsTheme.typography.bodyMedium,
                 maxLines = 3
             )
-
         }
     }
 }
 
+@Suppress("MagicNumber")
 private class ArticlePreviewProvider : PreviewParameterProvider<ArticleUI> {
     override val values = sequenceOf(
         ArticleUI(
