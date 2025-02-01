@@ -5,7 +5,7 @@
  1. Приложение написано на языке Kotlin;
  2. JetpackCompose, для написания UI;
  3. Dagger и Hilt, для внедрении зависимостей (DI);
- 4. OkHttp, Retrofit, Coil и Kotlin Serialization, для работы с сетью;
+ 4. OkHttp, Retrofit, Coil и Kotlinx Serialization, для работы с сетью;
  5. Coroutines, для асинхронна;
  6. Room, для работы с хранением данных.
 
